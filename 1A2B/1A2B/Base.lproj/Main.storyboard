@@ -414,6 +414,20 @@
                                     <constraint firstItem="evJ-yz-eDD" firstAttribute="centerY" secondItem="hBm-vQ-MrW" secondAttribute="centerY" id="mRr-ww-wKe"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WOK-gb-3z8">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="玩家 123 獲勝" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fha-1Z-O3y">
+                                        <rect key="frame" x="8" y="291" width="359" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.20011098682880402" green="0.20010645687580109" blue="0.20010949671268463" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -436,11 +450,13 @@
                     <connections>
                         <outlet property="inputNumber" destination="mcg-Ju-Qqg" id="YHY-kj-CPL"/>
                         <outlet property="recordTableView" destination="jdN-jA-E1h" id="0On-2i-32a"/>
+                        <outlet property="resultLabel" destination="Fha-1Z-O3y" id="xwZ-GA-jre"/>
+                        <outlet property="resultView" destination="WOK-gb-3z8" id="lnQ-am-g4f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="463" y="547"/>
+            <point key="canvasLocation" x="461.60000000000002" y="546.47676161919048"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jKR-ed-gwK">

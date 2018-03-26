@@ -34,6 +34,8 @@ class ViewController: UIViewController, UITableViewDelegate ,UITableViewDataSour
     
     // 元件宣告
     
+    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var resultView: UIView!
     @IBOutlet weak var recordTableView: UITableView!
     @IBOutlet weak var inputNumber: UILabel!
     @IBOutlet weak var ansLabel1: UILabel!
@@ -44,6 +46,7 @@ class ViewController: UIViewController, UITableViewDelegate ,UITableViewDataSour
     var enterRoom:Int?
     var roomNumber:Int!
     var random = false
+    var whoTurn:String?
     
     var randomRoomNumber = Int(arc4random() % 1000)
     
@@ -103,8 +106,11 @@ class ViewController: UIViewController, UITableViewDelegate ,UITableViewDataSour
                 checkArray[a] = -1
             }
             
+            ref?.child("Room/Repeat/Number/\(roomNumber!)/Turn").setValue(playerName!)
+            
             // Firebase
             ref?.child("Room/Repeat/Number/\(roomNumber!)/Result").childByAutoId().setValue("\(A)A,\(B)B")
+            
             
             removeArray = []
             numberArray = []
@@ -142,14 +148,26 @@ class ViewController: UIViewController, UITableViewDelegate ,UITableViewDataSour
         super.viewDidLoad()
         ref = Database.database().reference()
         
+        resultView.alpha = 0
+        
         if self.enterRoom != nil {
             self.roomNumber = self.enterRoom!
         } else {
             self.roomNumber = self.randomRoomNumber
         }
-
-    
-        ref?.child("Room/Repeat/Number/\(roomNumber!)").setValue(roomNumber)
+        
+        if random == false {
+            ref?.child("Room/Repeat/Number/\(roomNumber!)").setValue(roomNumber)
+        }
+        
+        handle = ref?.child("Room/Repeat/Number/\(roomNumber!)/Turn").observe(DataEventType.value, with: { (snapshot) in
+            
+            if let turn = snapshot.value as? String {
+                self.whoTurn = turn
+            }
+        })
+        
+        
         
         handle = ref?.child("Room/Repeat/Number/\(roomNumber!)/Guess Number").observe(DataEventType.childAdded, with: { (snapshot) in
             if let number = snapshot.value as? String {
@@ -162,8 +180,18 @@ class ViewController: UIViewController, UITableViewDelegate ,UITableViewDataSour
             if let message = snapshot.value as? String {
                 self.recordAArray.append(message)
                 self.recordTableView.reloadData()
+                
+                for i in self.recordAArray {
+                    if i == "4A,0B" {
+                        print("End")
+                        self.resultLabel.text = "玩家\(self.whoTurn!)獲勝!"
+                        self.resultView.alpha = 1
+                    }
+                }
             }
         })
+        
+        
         
         if playerName != "" {
             playerName = UserDefaults.standard.string(forKey: "userName")
@@ -180,22 +208,21 @@ class ViewController: UIViewController, UITableViewDelegate ,UITableViewDataSour
         
         
         
+        
         if random == false {
             randomNum()
+            ref?.child("Room/Repeat/Number/\(roomNumber!)/Answer").setValue(ansArray)
+            print(ansArray)
             
         } else {
-            for i in 0...3 {
-                handle = ref?.child("Room/Repeat/Number/\(roomNumber!)/Answer/\(i)").observe(DataEventType.childChanged, with: { (snapShot) in
-                    print(snapShot.value)
-                    self.ansArray2.append(snapShot.value as! Int)
-                    print(self.ansArray2)
-                })
-            }
-            
-            
+            handle = ref?.child("Room/Repeat/Number/\(roomNumber!)/Answer").observe(DataEventType.value, with: { (snapShot) in
+                
+                if let answerString = snapShot.value as? [Int] {
+                    self.ansArray = answerString
+                    
+                }
+            })
         }
-        
-        ref?.child("Room/Repeat/Number/\(roomNumber!)/Answer").setValue(ansArray)
 
     }
 
